@@ -11,6 +11,7 @@ struct SList{
     ~SList();
 	Node* CreateNode(Animal v);
     void addLast(Animal v);
+    void insertAfter(Node *p, Item v);
     Node *previous(Node *p);
     Node *searchName(Node *p, string name);
     void sort();
@@ -35,4 +36,14 @@ void SList::addLast(Animal v){
         tail = p;
     }
     size = size + 1;
+}
+void SList::insertAfter(Node *p, Item v) {
+	if (p == tail)
+		addLast(v);
+	else {
+		Node *q = CreateNode(v);
+		q->next = p->next;
+		p->next = q;	  
+	}
+	size++;
 }
