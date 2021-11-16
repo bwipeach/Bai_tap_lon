@@ -97,3 +97,20 @@ Node *SList::searchName(Node *p, string name){
     }
     return p;
 }
+// Sắp xếp
+void SList::sort(){
+    for(Node *p = head; p != tail; p=p->next){
+        for(Node *q = p->next; q != NULL; q = q->next){
+            if(p->data->getID() > q->data->getID()){
+                swap(p->data,q->data);
+            }
+        }
+    }
+}
+// tìm 1 phần tử ngay trước phần tử bất kì
+Node* SList::previous(Node *p) {
+	Node *t = head;
+	while (t->next != p)
+		t = t->next;
+	return t;
+}
