@@ -114,3 +114,23 @@ Node* SList::previous(Node *p) {
 		t = t->next;
 	return t;
 }
+// xoa o vi tri dau
+void SList::removeFirst(){
+   if(head==NULL){
+   	    cout<<"Khong tim thay ten";
+	}else{
+		Node*t=head;
+		head=head->next;
+		delete t;
+		size--;
+    }
+}
+// xoa o vi tri cuoi
+void SList::removeLast(){
+	Node *pre = previous(tail);
+	Node*t =tail;
+	pre->next=NULL;
+	tail=pre;
+	delete t;
+	size--;
+}	
