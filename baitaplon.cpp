@@ -24,27 +24,28 @@ class Animal{
                
 };
 // Làm việc với dslk
-struct Node{
+struct NodeL{
     Animal *data;
-    Node *next;
+    NodeL *next;
 };
 struct SList{
-	Node *head;
-	Node *tail;
+	NodeL *head;
+	NodeL *tail;
 	long size;
 	SList();
     ~SList();
-	Node* CreateNode(Animal *v);
+	NodeL* CreateNodeL(Animal *v);
     void addLast(Animal *v);
-    void insertAfter(Node *p, Animal *v);
-    Node *previous(Node *p);
-    Node *searchName(Node *p, string name);
+    NodeL *previous(NodeL *p);
+    NodeL *searchName(NodeL *p, string name);
     void sort();
-    void removeName(Node *p, string name);
+    void removeFirst();
+    void removeLast();
+    void removeName();
     void traverse() const;
 };
-Node* SList::CreateNode(Animal *v){
-	Node* p = new Node;
+NodeL* SList::CreateNodeL(Animal *v){
+	NodeL* p = new NodeL;
     Animal *v1 = new Animal(v);
 	p->data = v1;	
 	p->next = NULL;	
@@ -52,7 +53,7 @@ Node* SList::CreateNode(Animal *v){
 }
 // thêm vào cuối
 void SList::addLast(Animal v){
-    Node *p = CreateNode(v);
+    NodeL *p = CreateNodeL(v);
     if(size == 0){
         head = p;
         tail = p;
@@ -62,20 +63,10 @@ void SList::addLast(Animal v){
         tail = p;
     }
     size = size + 1;
-}
-void SList::insertAfter(Node *p, Animal *v) {
-	if (p == tail)
-		addLast(v);
-	else {
-		Node *q = CreateNode(v);
-		q->next = p->next;
-		p->next = q;	  
-	}
-	size++;
-}
+
 // Duyet cac ptu trong danh sach
 void SList::traverse() const{
-    Node *p = head;
+    NodeL *p = head;
     while(p != NULL){
         cout << p->data <<"\t"; 
         p = p->next;
@@ -84,7 +75,7 @@ void SList::traverse() const{
     delete p;
 }
 // Tìm kiếm 
-Node *SList::searchName(Node *p, string name){
+NodeL *SList::searchName(NodeL *p, string name){
     cout <<"Enter the name: ";
     getline(cin,name);
     if(p == NULL){
@@ -99,8 +90,8 @@ Node *SList::searchName(Node *p, string name){
 }
 // Sắp xếp
 void SList::sort(){
-    for(Node *p = head; p != tail; p=p->next){
-        for(Node *q = p->next; q != NULL; q = q->next){
+    for(NodeL *p = head; p != tail; p=p->next){
+        for(NodeL *q = p->next; q != NULL; q = q->next){
             if(p->data->getID() > q->data->getID()){
                 swap(p->data,q->data);
             }
@@ -108,18 +99,18 @@ void SList::sort(){
     }
 }
 // tìm 1 phần tử ngay trước phần tử bất kì
-Node* SList::previous(Node *p) {
-	Node *t = head;
+NodeL* SList::previous(NodeL *p) {
+	NodeL *t = head;
 	while (t->next != p)
 		t = t->next;
 	return t;
 }
 // xoa o vi tri dau
 void SList::removeFirst(){
-   if(head==NULL){
-   	    cout<<"Khong tim thay ten";
+   if(size == 0){
+   	    return;
 	}else{
-		Node*t=head;
+		NodeL*t = head;
 		head=head->next;
 		delete t;
 		size--;
@@ -127,10 +118,42 @@ void SList::removeFirst(){
 }
 // xoa o vi tri cuoi
 void SList::removeLast(){
-	Node *pre = previous(tail);
-	Node*t =tail;
+	NodeL *pre = previous(tail);
+	NodeL*t =tail;
 	pre->next=NULL;
 	tail=pre;
 	delete t;
 	size--;
 }	
+
+
+// xoa 1 ptu o vi tri bat ki
+void SList::removeName(){
+    string name;
+    cout<<"Nhap ten dong vat can xoa:";
+    fflush(stdin);
+    getline(cin,name);
+    NodeL*p=head;
+    for(p;p!=NULL;p=p->next){
+        if(p->data->getName()==name){
+            if(p == head){
+                removeFirst();
+                break;
+            }
+            else if(p==tail){
+                removeLast();
+                break;
+            }
+            else{
+                NodeLL *pre = previous(p);
+                pre->next = p->next;
+                delete p;
+                size--;
+                break;
+            }
+        }
+    }
+    if(p == NULL){
+            cout <<"Khong tim thay ten dong vat can xoa"<<endl;
+        }
+}
